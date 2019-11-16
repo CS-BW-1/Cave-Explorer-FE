@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import Login from "../views/LoginPage/login";
-import Register from "../views/RegisterPage/Register";
-import Game from "../views/GamePage/Game";
+import Login from "../pages/login";
+import Register from "../pages/Register";
+import Game from "../pages/Game";
 import PrivateRoute from "./PrivateRoute";
 
 const appRoutes = () => (

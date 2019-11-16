@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from "react";
 import generate from "generate-maze";
-import axiosWithHeader from "../../utils/axiosWithToken";
+import axiosWithHeader from "../utils/axiosWithToken";
 
 const token = "Token " + localStorage.getItem("key");
 const headers = {
