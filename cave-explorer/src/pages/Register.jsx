@@ -1,45 +1,56 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { AuthContainer } from "../ViewStyles/AuthStyles";
+import { AuthContainer } from "./PageStyles/AuthStyles";
 import { Link, withRouter } from "react-router-dom";
 import { PropagateLoader } from "react-spinners";
 
-const Login = props => {
+const Register = props => {
     const [userInput, setUser] = useState({
         username: "",
-        password: ""
+        password1: "",
+        password2: ""
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-
     const handleSubmit = e => {
         e.preventDefault();
         setLoading(true);
+
         axios
-            .post("https://lambda-mud-test.herokuapp.com/api/login/", userInput)
+            .post(
+                "https://lambda-mud-test.herokuapp.com/api/registration/",
+                userInput
+            )
             .then(res => {
-                console.log("Successful Login");
+                console.log(res);
                 localStorage.setItem("key", res.data.key);
-                props.history.push("/dashboard");
+                props.history.push("/");
             })
             .catch(err => {
-                console.log(err);
-                setError("Unable to log in with provided credentials");
+                if (err.response) {
+                    if (err.response.data.password1) {
+                        setError(err.response.data.password1);
+                    }
+                }
+                if (userInput.password1 !== userInput.password2)
+                    setError("Password confirmation doesn't match");
+                else {
+                    setError("This User is already registered");
+                }
                 setTimeout(() => {
-                    setError(null);
+                    setError("");
                 }, 5000);
             })
             .finally(err => {
                 setLoading(false);
             });
-
     };
 
     return (
         <AuthContainer>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit} style={{ height: "180px" }}>
+            <h1>Register</h1>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     placeholder="Username"
@@ -50,12 +61,20 @@ const Login = props => {
                 <input
                     type="password"
                     placeholder="Password"
-                    value={userInput.password}
-                    onChange={e => setUser({ ...userInput, password: e.target.value })}
+                    value={userInput.password1}
+                    onChange={e => setUser({ ...userInput, password1: e.target.value })}
                 />
+
+                <input
+                    type="password"
+                    placeholder="Confirm password"
+                    value={userInput.password2}
+                    onChange={e => setUser({ ...userInput, password2: e.target.value })}
+                />
+
                 <input
                     type="submit"
-                    value="Login"
+                    value={props.loading ? "Loading..." : "Register"}
                 />
                 <PropagateLoader
                     sizeUnit={"px"}
@@ -68,10 +87,10 @@ const Login = props => {
                 )}
             </form>
             <span>
-                Don't have an account? <Link to="/signup">Sign Up</Link>
+                Already have an account? <Link to="/login">Login</Link>
             </span>
-        </AuthContainer >
+        </AuthContainer>
     );
 };
 
-export default withRouter(Login);
+export default withRouter(Register);
