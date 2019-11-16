@@ -54,7 +54,7 @@ const useMaze = () => {
 
     dispatch({ type: LOADED, payload: maze });
 
-    return () => document.removeEventListener("keydown", handleKeyPress);
+    // return () => document.removeEventListener("keydown", handleKeyPress); This will be for taking in movement inputs, I want the whole thing to be built into this custom hook and it to be self cleaning
   }, []);
   return state;
 };
