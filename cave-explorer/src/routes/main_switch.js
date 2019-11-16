@@ -9,7 +9,8 @@ const appRoutes = () => (
   <Switch>
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Register} />
-    <Route path="/" component={Game} /> /* This will be Replaced with privateroute when the time comes.*/
+    {/* This will be Replaced with privateroute when the time comes.*/}
+    <Route path="/" component={Game} />{" "}
     <Route render={() => <Redirect to="/" />} />
   </Switch>
 );
