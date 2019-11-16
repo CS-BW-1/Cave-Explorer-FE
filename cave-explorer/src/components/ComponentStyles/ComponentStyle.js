@@ -16,7 +16,7 @@ export const StyledGrid = styled.section`
   }
 `;
 
-export const StyledCharacter = styled.div`
+export const StyledPlayer = styled.div`
   background: #fff;
   margin: 2px;
   border-radius: 2px;

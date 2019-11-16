@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { GameArena, GameContainer } from '../ViewStyles/GameStyles';
 
 import { Maze } from "../../components/Maze";
-
+import { Player } from "../../components/Player";
 
 import useMaze from "../../state/GameFunctions/gameFunctions";
 
