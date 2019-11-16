@@ -1,4 +1,4 @@
 [build]
   command = "yarn build"
   publish="./build"
-  base = "./Cave_Explorer"
+  base = "./cave-explorer"
