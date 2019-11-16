@@ -79,7 +79,7 @@ const Register = props => {
                 <PropagateLoader
                     sizeUnit={"px"}
                     size={8}
-                    color={"darkred"}
+                    color={"blue"}
                     loading={loading}
                 />
                 {error && (
