@@ -21,7 +21,7 @@ const Login = props => {
             .then(res => {
                 console.log("Successful Login");
                 localStorage.setItem("key", res.data.key);
-                props.history.push("/dashboard");
+                props.history.push("/");
             })
             .catch(err => {
                 console.log(err);
