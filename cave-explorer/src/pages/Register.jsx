@@ -83,7 +83,7 @@ const Register = props => {
                     loading={loading}
                 />
                 {error && (
-                    <p style={{ color: "darkred", textAlign: "center" }}>{error}</p>
+                    <p style={{ color: "blue", textAlign: "center" }}>{error}</p>
                 )}
             </form>
             <span>

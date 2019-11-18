@@ -11,6 +11,7 @@ const { min, max } = Math;
 
 // CONSTANTS
 const LOADED = "maze/LOADED";
+const KEY_PRESS = "maze/KEY_PRESS";
 const SUCCESS = "SUCCESS";
 const ONLOAD = "ONLOAD";
 
@@ -26,12 +27,25 @@ const reducer = (state, { type, payload }) => {
     case ONLOAD:
       return { ...state, directions: payload };
 
+    case KEY_PRESS: {
+      console.log("Reducer State Key:", state);
+      const cell = state.maze[state.y][state.x];
+      if (payload === "ArrowLeft" && !cell.left)
+        return { ...state, x: max(0, --state.x) };
+      if (payload === "ArrowUp" && !cell.top)
+        return { ...state, y: max(0, --state.y) };
+      if (payload === "ArrowRight" && !cell.right)
+        return { ...state, x: min(state.maze.length, ++state.x) };
+      if (payload === "ArrowDown" && !cell.bottom)
+        return { ...state, y: min(state.maze.length, ++state.y) };
+      break;
+    }
+
     default:
       return state;
   }
 };
 
-// STATE HOOK
 const useMaze = () => {
   const [state, dispatch] = useReducer(reducer, {
     maze: [],
@@ -39,22 +53,54 @@ const useMaze = () => {
     y: 0,
     directions: {}
   });
+  console.log("UseMaze current state:", state);
   useEffect(() => {
     const maze = generate(30);
 
     axiosWithHeader()
       .get("https://lambda-mud-test.herokuapp.com/api/adv/init/", headers)
       .then(res => {
-        console.log(res);
+        console.log("Server Response from Generating a maze Init", res);
         dispatch({ type: ONLOAD, payload: res.data });
       })
       .catch(err => {
-        console.log(err.response.data);
+        console.log(err);
       });
+
+    const handleKeyPress = ({ key }) => {
+      let direction = "";
+      console.log("in handle maze/Key_Press :", key);
+      if (key.includes("Arrow")) {
+        if (key === "ArrowLeft") {
+          direction = "w";
+        } else if (key === "ArrowUp") {
+          direction = "n";
+        } else if (key === "ArrowDown") {
+          direction = "s";
+        } else if (key === "ArrowRight") {
+          direction = "e";
+        }
+        dispatch({ type: KEY_PRESS, payload: key });
+      }
+      axiosWithHeader()
+        .post(
+          "https://lambda-mud-test.herokuapp.com/api/adv/move/",
+          {
+            direction
+          },
+          headers
+        )
+        .then(res => {
+          dispatch({ type: SUCCESS, payload: res.data });
+        })
+        .catch(err => console.log("Movement request error:", err));
+    };
 
     dispatch({ type: LOADED, payload: maze });
 
-    // return () => document.removeEventListener("keydown", handleKeyPress); This will be for taking in movement inputs, I want the whole thing to be built into this custom hook and it to be self cleaning
+    document.addEventListener("keydown", e => handleKeyPress(e));
+
+    return () => document.removeEventListener("keydown");
   }, []);
   return state;
 };

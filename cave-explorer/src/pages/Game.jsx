@@ -4,21 +4,25 @@ import { GameArena, GameContainer } from './PageStyles/GameStyles';
 
 import { Maze } from "../components/Maze";
 import { Player } from "../components/Player";
+import { Dashboard } from "../components/Dashboard";
 
 import useMaze from "../GameFunctions/gameFunctions";
 
 
 
-const Game = ({ history }) => {
+const Game = () => {
     // X and Y will represent the location of our player, the maze will be our 2darray generated into a board, loaded is a boolean of status, and directions will be available movements
     const { x, y, maze, loaded, directions } = useMaze();
     return (
         <GameContainer>
             {loaded && (
-                <GameArena width={30} height={30}>
-                    <Maze maze={maze} width={30} height={30} />
-                    <Player x={x} y={y} />
-                </GameArena>
+                <>
+                    <Dashboard directions={directions} />
+                    <GameArena width={30} height={30}>
+                        <Maze maze={maze} width={30} height={30} />
+                        <Player x={x} y={y} />
+                    </GameArena>
+                </>
             )}
         </GameContainer>
     );
