@@ -35,7 +35,7 @@ const reducer = (state, { type, payload }) => {
       if (payload === "ArrowUp" && !cell.top)
         return { ...state, y: max(0, --state.y) };
       if (payload === "ArrowRight" && !cell.right)
-        return { ...state, x: min(state.maze.length, ++state.x) };
+        return { ...state, x: min(state.maze[0].length, ++state.x) };
       if (payload === "ArrowDown" && !cell.bottom)
         return { ...state, y: min(state.maze.length, ++state.y) };
       break;

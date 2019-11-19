@@ -18,8 +18,8 @@ const Game = () => {
             {loaded && (
                 <>
                     <Dashboard directions={directions} />
-                    <GameArena width={30} height={30}>
-                        <Maze maze={maze} width={30} height={30} />
+                    <GameArena width={50} height={53}>
+                        <Maze maze={maze} />
                         <Player x={x} y={y} />
                     </GameArena>
                 </>
