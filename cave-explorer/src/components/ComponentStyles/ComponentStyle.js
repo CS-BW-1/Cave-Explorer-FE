@@ -18,7 +18,6 @@ export const StyledGrid = styled.section`
 
 export const StyledPlayer = styled.div`
   background: #fff;
-  margin: 2px;
   border-radius: 2px;
 `;
 

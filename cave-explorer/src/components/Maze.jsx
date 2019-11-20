@@ -17,7 +17,7 @@ export const Maze = ({ maze }) => (
                         borderRight: showGrid(right),
                         borderLeft: showGrid(left),
                         borderTop: showGrid(top),
-                        borderBottom: showGrid(bottom)
+                        borderBottom: showGrid(bottom),
                     }}
                 />
             ))

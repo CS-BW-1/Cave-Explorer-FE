@@ -23,7 +23,7 @@ const Register = props => {
                 userInput
             )
             .then(res => {
-                console.log(res);
+                console.log("Register", res);
                 localStorage.setItem("key", res.data.key);
                 props.history.push("/");
             })
