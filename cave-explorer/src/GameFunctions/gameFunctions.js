@@ -2,11 +2,6 @@ import { useReducer, useEffect } from "react";
 import generate from "generate-maze";
 import axiosWithHeader from "../utils/axiosWithToken";
 
-const token = "Token " + localStorage.getItem("key");
-const headers = {
-  headers: { "Content-Type": "application/JSON", Authorization: token }
-};
-
 const { min, max } = Math;
 
 // CONSTANTS
@@ -58,7 +53,7 @@ const useMaze = () => {
     const maze = generate(30);
 
     axiosWithHeader()
-      .get("https://lambda-mud-test.herokuapp.com/api/adv/init/", headers)
+      .get("https://lambda-mud-test.herokuapp.com/api/adv/init/")
       .then(res => {
         console.log("Server Response from Generating a maze Init", res);
         dispatch({ type: ONLOAD, payload: res.data });
@@ -83,14 +78,11 @@ const useMaze = () => {
         dispatch({ type: KEY_PRESS, payload: key });
       }
       axiosWithHeader()
-        .post(
-          "https://lambda-mud-test.herokuapp.com/api/adv/move/",
-          {
-            direction
-          },
-          headers
-        )
+        .post("https://lambda-mud-test.herokuapp.com/api/adv/move/", {
+          direction
+        })
         .then(res => {
+          console.log("Movement Response", res);
           dispatch({ type: SUCCESS, payload: res.data });
         })
         .catch(err => console.log("Movement request error:", err));

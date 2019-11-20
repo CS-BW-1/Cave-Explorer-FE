@@ -19,7 +19,7 @@ const Game = () => {
                 <>
                     <Dashboard directions={directions} />
                     <GameArena width={50} height={53}>
-                        <Maze maze={maze} />
+                        <Maze maze={maze} x={x} y={y} />
                         <Player x={x} y={y} />
                     </GameArena>
                 </>
