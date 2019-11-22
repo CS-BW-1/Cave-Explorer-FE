@@ -19,7 +19,7 @@ const Register = props => {
 
         axios
             .post(
-                "https://lambda-mud-test.herokuapp.com/api/registration/",
+                "https://yaco-dev.herokuapp.com/api/registration/",
                 userInput
             )
             .then(res => {

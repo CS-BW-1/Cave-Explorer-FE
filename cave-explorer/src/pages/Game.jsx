@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { GameArena, GameContainer } from './PageStyles/GameStyles';
-
+import map from '../assets/image(2).png'
 import { Maze } from "../components/Maze";
 import { Player } from "../components/Player";
 import { Dashboard } from "../components/Dashboard";
@@ -18,8 +18,8 @@ const Game = () => {
             {loaded && (
                 <>
                     <Dashboard directions={directions} />
-                    <GameArena width={50} height={53}>
-                        <Maze maze={maze} x={x} y={y} />
+                    <GameArena width={50} height={55}>
+                        <img src={map} alt="Graphic representation of the Map" />
                         <Player x={x} y={y} />
                     </GameArena>
                 </>
