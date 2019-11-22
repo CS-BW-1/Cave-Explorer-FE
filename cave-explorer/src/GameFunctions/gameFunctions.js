@@ -36,6 +36,7 @@ const reducer = (state, { type, payload }) => {
       else{
         return state
       }
+    }
 
     default:
       return state;
