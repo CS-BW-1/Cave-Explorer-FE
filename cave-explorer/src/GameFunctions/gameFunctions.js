@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from "react";
-import generate from "generate-maze";
+// import generate from "generate-maze";
 import axiosWithHeader from "../utils/axiosWithToken";
 
 const { min, max } = Math;
@@ -9,6 +9,7 @@ const LOADED = "maze/LOADED";
 const KEY_PRESS = "maze/KEY_PRESS";
 const SUCCESS = "SUCCESS";
 const ONLOAD = "ONLOAD";
+const BUILD_MAZE = "maze/BUILD_MAZE";
 
 // REDUCER
 const reducer = (state, { type, payload }) => {
@@ -22,18 +23,35 @@ const reducer = (state, { type, payload }) => {
     case ONLOAD:
       return { ...state, directions: payload };
 
+    case BUILD_MAZE: {
+      let grid = [];
+      // Trim the grid down to something more managable
+
+      for (let i = 0; i < 20; i++) {
+        grid.push(payload.filter(room => room.y === i));
+        if (i % 2 !== 0) {
+          grid[i].reverse();
+        }
+      }
+      // Test to make sure that these are still sorted
+      console.log("Sort Test: ", grid);
+      return { ...state, maze: grid };
+    }
+
     case KEY_PRESS: {
       console.log("Reducer State Key:", state);
       const cell = state.maze[state.y][state.x];
-      if (payload === "ArrowLeft" && !cell.left)
-        return { ...state, x: max(0, --state.x) };
-      if (payload === "ArrowUp" && !cell.top)
+      if (payload === "ArrowLeft" && cell.w_to)
+        return { ...state, x: max(1, --state.x) };
+      else if (payload === "ArrowUp" && cell.n_to)
         return { ...state, y: max(0, --state.y) };
-      if (payload === "ArrowRight" && !cell.right)
-        return { ...state, x: min(state.maze[0].length, ++state.x) };
-      if (payload === "ArrowDown" && !cell.bottom)
-        return { ...state, y: min(state.maze.length, ++state.y) };
-      break;
+      else if (payload === "ArrowRight" && cell.e_to)
+        return { ...state, x: min(state.maze[0].length - 1, ++state.x) };
+      else if (payload === "ArrowDown" && cell.s_to)
+        return { ...state, y: min(state.maze.length - 1, ++state.y) };
+      else {
+        return state;
+      }
     }
 
     default:
@@ -48,12 +66,21 @@ const useMaze = () => {
     y: 0,
     directions: {}
   });
+
   console.log("UseMaze current state:", state);
   useEffect(() => {
-    const maze = generate(30);
+    let maze = [];
 
     axiosWithHeader()
-      .get("https://lambda-mud-test.herokuapp.com/api/adv/init/")
+      .get("https://yaco-dev.herokuapp.com/api/rooms/")
+      .then(res => {
+        console.log(res.data);
+        dispatch({ type: BUILD_MAZE, payload: res.data });
+      })
+      .catch(err => console.log("Get Maze Error", err));
+
+    axiosWithHeader()
+      .get("https://yaco-dev.herokuapp.com/api/adv/init/")
       .then(res => {
         console.log("Server Response from Generating a maze Init", res);
         dispatch({ type: ONLOAD, payload: res.data });
@@ -77,8 +104,9 @@ const useMaze = () => {
         }
         dispatch({ type: KEY_PRESS, payload: key });
       }
+      console.log("Direction OBJ: ", { direction });
       axiosWithHeader()
-        .post("https://lambda-mud-test.herokuapp.com/api/adv/move/", {
+        .post("https://yaco-dev.herokuapp.com/api/adv/move/", {
           direction
         })
         .then(res => {
@@ -87,13 +115,14 @@ const useMaze = () => {
         })
         .catch(err => console.log("Movement request error:", err));
     };
-
+    console.log("Maze Prior to reaching dispatch", maze);
     dispatch({ type: LOADED, payload: maze });
 
     document.addEventListener("keydown", e => handleKeyPress(e));
 
     return () => document.removeEventListener("keydown");
   }, []);
+
   return state;
 };
 
