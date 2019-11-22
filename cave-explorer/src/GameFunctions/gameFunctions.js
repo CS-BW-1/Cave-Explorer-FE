@@ -41,7 +41,7 @@ const reducer = (state, { type, payload }) => {
     case KEY_PRESS: {
       console.log("Reducer State Key:", state);
       const cell = state.maze[state.y][state.x];
-<<<<<<< HEAD
+
       if (payload === "ArrowLeft" && cell.w_to)
         return { ...state, x: max(1, --state.x) };
       else if (payload === "ArrowUp" && cell.n_to)
@@ -52,18 +52,7 @@ const reducer = (state, { type, payload }) => {
         return { ...state, y: min(state.maze.length - 1, ++state.y) };
       else {
         return state;
-=======
-      if (payload === "ArrowLeft" && !cell.left)
-        return { ...state, x: max(0, --state.x) };
-      else if (payload === "ArrowUp" && !cell.top)
-        return { ...state, y: max(0, --state.y) };
-      else if (payload === "ArrowRight" && !cell.right)
-        return { ...state, x: min(state.maze[0].length, ++state.x) };
-      else if (payload === "ArrowDown" && !cell.bottom)
-        return { ...state, y: min(state.maze.length, ++state.y) };
-      else{
-        return state
->>>>>>> dda46580f617a2be87f884e44b91258b20246333
+
       }
     }
 
